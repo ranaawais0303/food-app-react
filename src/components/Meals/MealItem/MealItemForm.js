@@ -9,7 +9,7 @@ const MealItemForm = (props) => {
         input={{
           id: "amount",
           type: "number",
-          min: "5",
+          min: "1",
           max: "5",
           step: "1",
           defaultValue: "1",
