@@ -36,9 +36,9 @@ const CartProvider = (props) => {
     });
   };
   const cartContext = {
-    items: cartState.item,
+    items: cartState.items,
     totalAmount: 0,
-    addItems: addItemToCartHandler,
+    addItem: addItemToCartHandler,
     removeItem: removeItemToCartHandler,
   };
 
