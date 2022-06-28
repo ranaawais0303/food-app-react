@@ -2,8 +2,8 @@ import React, { useRef, useState } from "react";
 import classes from "./MealItemForm.module.css";
 import Input from "../../UI/Input";
 const MealItemForm = (props) => {
+  const [AmountIsValid, setAmountIsValid] = useState(true);
   const amountInputref = useRef();
-  const [AmountIsValid, setAmountIsValid] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ const MealItemForm = (props) => {
       setAmountIsValid(false);
       return;
     }
-    setAmountIsValid(true);
+    // setAmountIsValid(true);
     props.onAddToCart(enteredAmountNumber);
   };
   return (
@@ -35,7 +35,7 @@ const MealItemForm = (props) => {
         }}
       />
       <button>+ Add</button>
-      {AmountIsValid && <p>Please enter amount between(1 to 5)</p>}
+      {!AmountIsValid && <p>Please enter amount between(1 to 5)</p>}
     </form>
   );
 };
