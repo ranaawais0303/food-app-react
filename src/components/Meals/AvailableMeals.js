@@ -6,6 +6,7 @@ import MealItem from "./MealItem/MealItem";
 const url = "https://my-react-bbfab-default-rtdb.firebaseio.com/FoodList.json";
 const AvailableMeals = (props) => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(url);
@@ -20,9 +21,17 @@ const AvailableMeals = (props) => {
         });
       }
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
     fetchMeals();
   }, []);
+  if (isLoading) {
+    return (
+      <section className={classes.MealsLoading}>
+        <p>is Loading...</p>
+      </section>
+    );
+  }
   const meanList = meals.map((meal) => {
     return (
       <MealItem
