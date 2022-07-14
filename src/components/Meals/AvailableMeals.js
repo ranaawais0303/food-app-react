@@ -7,9 +7,13 @@ const url = "https://my-react-bbfab-default-rtdb.firebaseio.com/FoodList.json";
 const AvailableMeals = (props) => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState();
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Something went wrong");
+      }
       const data = await response.json();
       const loadedMeals = [];
       for (const key in data) {
@@ -23,12 +27,24 @@ const AvailableMeals = (props) => {
       setMeals(loadedMeals);
       setIsLoading(false);
     };
-    fetchMeals();
+    //because fetch meals is async function must use await
+    //or catch error to resolve promise not reject
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
   }, []);
   if (isLoading) {
     return (
       <section className={classes.MealsLoading}>
         <p>is Loading...</p>
+      </section>
+    );
+  }
+  if (httpError) {
+    return (
+      <section className={classes.MealsError}>
+        <p>{httpError}</p>
       </section>
     );
   }
