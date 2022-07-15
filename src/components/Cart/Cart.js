@@ -4,9 +4,13 @@ import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
-// const cartItems = <ul>{}</ul>;
+
+const url = "https://my-react-bbfab-default-rtdb.firebaseio.com/Orders.json";
+
 const Cart = (props) => {
   const [isCheckout, setIsCheckOut] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -22,8 +26,25 @@ const Cart = (props) => {
       amount: 1,
     });
   };
+
+  ////////////////////order handler button////////////
   const onderHandler = () => {
     setIsCheckOut(true);
+  };
+
+  ////////submit orderhandler recieve data from checkout
+  const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true);
+
+    await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        user: userData,
+        orderItems: cartCtx.items,
+      }),
+    });
+    setIsSubmitting(false);
+    setDidSubmit(true);
   };
   const cartItems = (
     <ul className={classes["cart-items"]}>
@@ -51,6 +72,21 @@ const Cart = (props) => {
       )}
     </div>
   );
+
+  const cartModalContent = (
+    <React.Fragment>
+      {cartItems}
+      <div className={classes.total}>
+        <span>Total Amount</span>
+        <span>{totalAmount}</span>
+      </div>
+
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
+      )}
+      {!isCheckout && modalActions}
+    </React.Fragment>
+  );
   return (
     <Modal onClose={props.onClose}>
       {cartItems}
@@ -58,7 +94,9 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={props.onClose} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
+      )}
       {!isCheckout && modalActions}
     </Modal>
   );

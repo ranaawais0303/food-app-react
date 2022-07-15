@@ -29,13 +29,34 @@ const Checkout = (props) => {
     //check the validation
     const enteredNameIsValid = !isEmpty(enteredname);
     const enteredStreetIsValid = !isEmpty(enteredStreet);
-    const enteredPostalCodeIsValid = !isEmpty(enteredPostalCode);
-    const enteredCityIsValid = isFiveChar(enteredCity);
+    const enteredPostalCodeIsValid = isFiveChar(enteredPostalCode);
+    const enteredCityIsValid = !isEmpty(enteredCity);
+
+    //set form validation
     setformInputValidity({
       name: enteredNameIsValid,
       street: enteredStreetIsValid,
       city: enteredCityIsValid,
       postalCode: enteredPostalCodeIsValid,
+    });
+
+    ///////////////////set form validity ///////////////
+    const formIsValid =
+      enteredNameIsValid &&
+      enteredStreetIsValid &&
+      enteredPostalCodeIsValid &&
+      enteredPostalCodeIsValid;
+
+    if (!formIsValid) {
+      return;
+    }
+
+    //////////////send object to cart///////////////////
+    props.onConfirm({
+      name: enteredname,
+      street: enteredStreet,
+      postalCode: enteredPostalCode,
+      city: enteredCity,
     });
   };
 
