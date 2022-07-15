@@ -5,6 +5,8 @@ const defaultCartState = {
   items: [],
   totalAmount: 0,
 };
+
+///////////////Reducer function////////////////////////////////
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
     const updatedTotalAmount =
