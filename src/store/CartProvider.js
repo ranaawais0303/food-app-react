@@ -55,31 +55,47 @@ const cartReducer = (state, action) => {
       totalAmount: updatedTotalAmount,
     };
   }
+  ///////////////////////Clear data/////////////////
+  if (action.type === "CLEAR") {
+    return defaultCartState;
+  }
   return defaultCartState;
 };
 
+//////////////////USE REDUCER/////////////////////
 const CartProvider = (props) => {
   const [cartState, dispatchCartAction] = useReducer(
     cartReducer,
     defaultCartState
   );
+
+  /////////////////ADD Handler////////////////////
   const addItemToCartHandler = (item) => {
     dispatchCartAction({
       type: "ADD",
       item: item,
     });
   };
+  ///////////////Remove Handler//////////////////
   const removeItemToCartHandler = (id) => {
     dispatchCartAction({
       type: "REMOVE",
       id: id,
     });
   };
+
+  ////////////Clear Cart Handler///////////////
+  const clearCartHandler = () => {
+    dispatchCartAction({ type: "CLEAR" });
+  };
+
+  //////////////set cartContext////////////////
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemToCartHandler,
+    clearCart: clearCartHandler,
   };
 
   return (

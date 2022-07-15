@@ -45,7 +45,10 @@ const Cart = (props) => {
     });
     setIsSubmitting(false);
     setDidSubmit(true);
+    cartCtx.clearCart();
   };
+
+  ///////////////////cart Items constant/////////////
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartCtx.items.map((item) => (
@@ -60,6 +63,8 @@ const Cart = (props) => {
       ))}
     </ul>
   );
+
+  ///////////////////////Modal Actions/////////////////////
   const modalActions = (
     <div className={classes.actions}>
       <button className={classes["button--alt"]} onClick={props.onClose}>
@@ -73,6 +78,7 @@ const Cart = (props) => {
     </div>
   );
 
+  //////////////////Cart Modal Content///////////////////////
   const cartModalContent = (
     <React.Fragment>
       {cartItems}
@@ -87,17 +93,26 @@ const Cart = (props) => {
       {!isCheckout && modalActions}
     </React.Fragment>
   );
+
+  ////////////////////submit did submit constant/////////////////
+  const isSubmittingModalContent = <p>Sending order Data...</p>;
+  const didSubmitModalContent = (
+    <React.Fragment>
+      <p>Successfully sent the order</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+    </React.Fragment>
+  );
+
+  //////////////////////put all in jsx//////////////////////////
   return (
     <Modal onClose={props.onClose}>
-      {cartItems}
-      <div className={classes.total}>
-        <span>Total Amount</span>
-        <span>{totalAmount}</span>
-      </div>
-      {isCheckout && (
-        <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
-      )}
-      {!isCheckout && modalActions}
+      {!isSubmitting && !didSubmit && cartModalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {!isSubmitting && didSubmit && didSubmitModalContent}
     </Modal>
   );
 };
